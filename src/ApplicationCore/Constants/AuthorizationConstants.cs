@@ -15,6 +15,6 @@ namespace ApplicationCore.Constants
 		public static class Roles
 		{
 			public const string ADMINISTRATOR = "Admin";
-		}
+		} 
 	}
 }
