@@ -1,8 +1,16 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using ApplicationCore.Entities
+@using ApplicationCore.Interfaces
+@inject IRepository<Product> ProductRepo
+@{
+	ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<h1>Products(Test)</h1>
+
+@foreach (var p in await ProductRepo.GetAllAsync())
+{
+	<p>
+		<img src="~/img/products/@p.PictureUri" alt="product" height="24" />
+		@p.Id @p.Name @p.Price
+	</p>
+}

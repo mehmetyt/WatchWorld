@@ -7,6 +7,7 @@ namespace ApplicationCore.Interfaces
 	public interface IRepository<T> where T :BaseEntity
 	{
 		public Task<T?> GetByIdAsync(int id);
+		public Task<List<T>> GetAllAsync();
 		public Task<List<T>> GetAllAsync(ISpecification<T> specification);
 		public Task<T> AddAsync(T entity);
 		public Task UpdateAsync(T entity);
