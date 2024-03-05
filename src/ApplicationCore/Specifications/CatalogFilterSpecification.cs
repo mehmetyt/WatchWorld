@@ -17,5 +17,10 @@ namespace ApplicationCore.Specifications
             if(brandId.HasValue)
                 Query.Where(x => x.BrandId == brandId);
         }
+
+        public CatalogFilterSpecification(int? categryId, int? brandId,int skip,int take):this(categryId,brandId)
+        {
+            Query.Skip(skip).Take(take);
+        }
     }
 }
