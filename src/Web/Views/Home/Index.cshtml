@@ -2,6 +2,7 @@
 
 @{
 	ViewData["Title"] = "Home Page";
+	var pi = Model.PaginationInfo;
 }
 
 <div class="card mb-3">
@@ -19,7 +20,7 @@
 				<label>Brand</label>
 			</div>
 			<div class="col-auto">
-				<select class="form-select" asp-items="@Model.Brands" asp-for="@Model.BrandId" >
+				<select class="form-select" asp-items="@Model.Brands" asp-for="@Model.BrandId">
 					<option value="">All</option>
 				</select>
 			</div>
@@ -35,20 +36,84 @@
 	@foreach (var p in Model.CatalogItems)
 	{
 		<div class="col-sm-6 col-md-4 col-lg-3 mb-4">
-				<div class="product-container shadow p-3">
-					<div class="product-image">
-						<img src="~/img/products/@p.PictureUri" alt="@p.Name" class="w-100" />
-					</div>
-					<div class="product-name my-2 h6" title="Product Name">
-						@p.Name
-					</div>
-					<div class="d-flex justify-content-between align-items-center">
-						@p.Price.ToString("c2")
-						<a href="#" class="btn btn-sm btn-success">
-							<i class="fa-solid fa-cart-plus"></i>
-						</a>
-					</div>
+			<div class="product-container shadow p-3">
+				<div class="product-image">
+					<img src="~/img/products/@p.PictureUri" alt="@p.Name" class="w-100" />
 				</div>
+				<div class="product-name my-2 h6" title="Product Name">
+					@p.Name
+				</div>
+				<div class="d-flex justify-content-between align-items-center">
+					@p.Price.ToString("c2")
+					<a href="#" class="btn btn-sm btn-success">
+						<i class="fa-solid fa-cart-plus"></i>
+					</a>
+				</div>
+			</div>
 		</div>
 	}
 </div>
+
+
+
+
+<p class="text-center mt-2 text-secondary">Showing @pi.RangeStart - @pi.RangeEnd of @pi.TotalItems</p>
+<nav aria-label="Page navigation example">
+	<ul class="pagination justify-content-center">
+		@if (pi.HasPrevious)
+		{
+			<li class="page-item">
+				<a asp-route-CategoryId="@Model.CategoryId" asp-route-BrandId="@Model.BrandId" asp-route-PageId="@(pi.PageId-1)" class="page-link" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+
+		}
+		else
+		{
+			<li class="page-item disabled">
+				<a class="page-link" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+
+		}
+
+		@foreach (int i in pi.PageNumbers)
+		{
+			if (i == -1)
+			{
+				<li class="page-item disabled">
+					<a class="page-link">&hellip;</a>
+				</li>
+			}
+			else
+			{
+				<li class="page-item @(i==pi.PageId?"active":"")">
+					<a asp-route-CategoryId="@Model.CategoryId" asp-route-BrandId="@Model.BrandId" asp-route-PageId="@i" class="page-link">@i</a>
+				</li>
+			}
+		}
+
+		@if (pi.HasNext)
+		{
+			<li class="page-item">
+				<a asp-route-CategoryId="@Model.CategoryId" asp-route-BrandId="@Model.BrandId" asp-route-PageId="@(pi.PageId+1)" class="page-link" aria-label="Previous">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+
+		}
+		else
+		{
+			<li class="page-item disabled">
+				<a class="page-link" aria-label="Previous">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+
+		}
+
+
+	</ul>
+</nav>
