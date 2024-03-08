@@ -37,3 +37,9 @@ body {
     white-space: nowrap;
     overflow: hidden;
 }
+
+/*-----------------------------------------------------*/
+
+.number-input > .quantity {
+    width: 70px;
+}
