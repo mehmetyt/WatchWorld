@@ -3,6 +3,7 @@
 	ViewBag.Title = "Basket";
 }
 
+
 <!--Section: Block Content-->
 <section>
 
@@ -12,61 +13,73 @@
 		<!--Grid column-->
 		<div class="col-lg-8">
 
-			<!-- Card -->
-			<div class="mb-3">
-				<div class="pt-4">
+			<form asp-action="Update">
+				<!-- Card -->
+				<div class="mb-3">
+					<div class="pt-4">
 
-					<div class="d-flex justify-content-between align-items-baseline">
-						<h5 class="mb-4">Cart (<span>@Model.TotalItems</span> items)</h5>
+						<div class="d-flex justify-content-between align-items-baseline">
+							<h5 class="mb-4">Cart (<span>@Model.TotalItems</span> items)</h5>
 
-						<div>
-							<button type="button" id="btnEmpty" href="#" class="btn btn-sm btn-danger">Empty Cart</button>
-							<button class="btn btn-sm btn-success ms-2">Update Cart</button>
-						</div>
-					</div>
-
-
-					@foreach (var item in Model.Items)
-					{
-						<div class="row mb-4">
-							<div class="col-sm-3 col-lg-2 col-xl-2">
-								<div class="rounded mb-3 mb-md-0">
-									<img class="img-fluid w-100" src="~/img/products/@item.PictureUri" alt="Sample">
-								</div>
+							<div>
+								<button type="button" id="btnEmpty" href="#" class="btn btn-sm btn-danger">Empty Cart</button>
+								<button class="btn btn-sm btn-success ms-2">Update Cart</button>
 							</div>
-							<div class="col-sm-9 col-lg-10 col-xl-10">
-								<div>
-									<div class="d-flex justify-content-between">
-										<div>
-											<h5>@item.ProductName</h5>
-											<p class="mb-3 text-muted text-uppercase small">Unit Price: @item.UnitPrice.ToString("c2")</p>
-										</div>
-										<div>
-											<div class="number-input mb-0">
-												<input class="quantity form-control" min="1" value="@item.Quantity" type="number">
-												@* <input class="quantity form-control" min="1" asp-for="@item.Quantity" type="number"> *@
+						</div>
+
+						@if (Model.Items.Count == 0)
+						{
+
+							<div class="text-center">
+								<i class="fa-solid fa-cart-shopping display-1 d-block my-5"></i>
+								<h4 class="mt-5">Your cart is currently empty.</h4>
+								<p class="text-secondary">Before proceed to checkout you must add some products to your shopping cart.</p>
+								<p class="text-secondary">You will find a lot of interesting products on your "Shop" page.</p>
+								<a class="btn btn-primary" asp-controller="Home" asp-action="Index">Return To Shop</a>
+							</div>
+						}
+
+						@foreach (var item in Model.Items)
+						{
+							<div class="row mb-4">
+								<div class="col-sm-3 col-lg-2 col-xl-2">
+									<div class="rounded mb-3 mb-md-0">
+										<img class="img-fluid w-100" src="~/img/products/@item.PictureUri" alt="Sample">
+									</div>
+								</div>
+								<div class="col-sm-9 col-lg-10 col-xl-10">
+									<div>
+										<div class="d-flex justify-content-between">
+											<div>
+												<h5>@item.ProductName</h5>
+												<p class="mb-3 text-muted text-uppercase small">Unit Price: @item.UnitPrice.ToString("c2")</p>
+											</div>
+											<div>
+												<div class="number-input mb-0">
+													<input class="quantity form-control" min="1" value="@item.Quantity" type="number" name="quantities[@item.ProductId]">
+												</div>
 											</div>
 										</div>
-									</div>
-									<div class="d-flex justify-content-between align-items-center">
-										<div>
-											<a href="#!" type="button" class="text-decoration-none small text-uppercase me-3">
-												<i class="fas fa-trash-alt me-1"></i> Remove item
-											</a>
-											<a href="#!" type="button" class="text-decoration-none small text-uppercase">
-												<i class="fas fa-heart me-1"></i> Move to wish list
-											</a>
+										<div class="d-flex justify-content-between align-items-center">
+											<div>
+												<a name="removeItem" data-remove-id="@item.ProductId" type="button" class="text-decoration-none small text-uppercase me-3">
+													<i class="fas fa-trash-alt me-1"></i> Remove item
+												</a>
+												<a href="#!" type="button" class="text-decoration-none small text-uppercase">
+													<i class="fas fa-heart me-1"></i> Move to wish list
+												</a>
+											</div>
+											<p class="mb-0"><span><strong id="summary">@item.TotalPrice.ToString("c2")</strong></span></p>
 										</div>
-										<p class="mb-0"><span><strong id="summary">@item.TotalPrice.ToString("c2")</strong></span></p>
 									</div>
 								</div>
 							</div>
-						</div>
-						<hr class="mb-4">
-					}
+							<hr class="mb-4">
+						}
+					</div>
 				</div>
-			</div>
-			<!-- Card -->
+				<!-- Card -->
+			</form>
 		</div>
 		<!--Grid column-->
 		<!--Grid column-->
@@ -106,7 +119,13 @@
 	<!-- Grid row -->
 
 </section>
+
+
 <form asp-action="Empty" id="frmEmpty" class="d-inline-block"></form>
+
+<form asp-action="RemoveItem" id="frmRemoveItem" class="d-inline-block">
+	<input type="hidden" name="productId" id="hdnProductId" />
+</form>
 
 
 @section Scripts {
@@ -131,6 +150,29 @@
 				}
 			});
 		});
+		$('a[name="removeItem"]').click(function () {
+
+			Swal.fire({
+				title: "Are you sure?",
+				text: "You won't be able to revert this!",
+				icon: "warning",
+				showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "Yes, remove it!"
+			}).then((result) => {
+				if (result.isConfirmed) {
+
+					const productId = $(this).data('remove-id');
+					$('#hdnProductId').val(productId);
+					$('#frmRemoveItem').submit();
+
+				}
+			});
+
+
+		});
+
 
 
 

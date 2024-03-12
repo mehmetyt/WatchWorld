@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Web.Extensions;
 using Web.Interfaces;
 using Web.Models;
 using Web.Services;
@@ -20,6 +21,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 builder.Services.AddScoped<IBasketService, BasketService>();
 builder.Services.AddScoped<IHomeViewModelService,HomeViewModelService>();
 builder.Services.AddScoped<IBasketViewModelService,BasketViewModelService>();
+builder.Services.AddScoped<IOrderService,OrderService>();
 
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -50,6 +52,8 @@ app.UseRequestLocalization("en-US");
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseBasketTransfer();
 
 app.MapControllerRoute(
 	name: "default",
