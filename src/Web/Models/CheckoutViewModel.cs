@@ -39,12 +39,12 @@ namespace Web.Models
 
 		[Required]
 		[Display(Name = "Expiration")]
-		[RegularExpression(@"#[0-9]{2}\/[0-9]{2}$",ErrorMessage ="Invalid{0}.")]
-		public string CCExpiration { get; set; } = null!;
+        [RegularExpression(@"^[0-9]{2}\/[0-9]{2}$", ErrorMessage = "Invalid {0}.")]
+        public string CCExpiration { get; set; } = null!;
 
 		[Required]
 		[Display(Name = "Cvv")]
-		[RegularExpression(@"#[0-9]{3}$", ErrorMessage = "Invalid{0}.")]
-		public string CCCvv { get; set; } = null!;
+        [RegularExpression(@"^[0-9]{3}$", ErrorMessage = "Invalid {0}.")]
+        public string CCCvv { get; set; } = null!;
 	}
 }

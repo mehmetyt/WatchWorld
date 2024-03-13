@@ -60,11 +60,18 @@ namespace Web.Controllers
 		}
 
 		[Authorize, HttpPost, ValidateAntiForgeryToken]
-		public async Task<IActionResult> Checkout([ModelBinder(Name = "checkoutViewModel")] CheckoutViewModel checkoutViewModel)
+		public async Task<IActionResult> Checkout(CheckoutViewModel checkoutViewModel)
 		{
-			await _basketViewModelService.CheckoutAsync(checkoutViewModel.Street, checkoutViewModel.City, checkoutViewModel.State, checkoutViewModel.Country, checkoutViewModel.ZipCode);
 
-			return RedirectToAction("OrderConfirmed");
+			if (ModelState.IsValid)
+			{
+				await _basketViewModelService.CheckoutAsync(checkoutViewModel.Street, checkoutViewModel.City, checkoutViewModel.State, checkoutViewModel.Country, checkoutViewModel.ZipCode);
+				return RedirectToAction("OrderConfirmed");
+			}
+
+			var basket = await _basketViewModelService.GetBasketViewModelAsync();
+			checkoutViewModel.Basket = basket;
+			return View(checkoutViewModel);
 		}
 
 		[Authorize]

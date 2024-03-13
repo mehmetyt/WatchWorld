@@ -20,7 +20,7 @@ A sample N-Layered .Net Core Project Demonstrating Clean Architecture and the Ge
 
 ## UnitTests
 
-...
+-NSubstitute
 
 ## Migrations
 
